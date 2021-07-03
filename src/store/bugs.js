@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { createSelector } from 'reselect'
 
 let lastId = 0
 
@@ -11,21 +12,51 @@ const slice = createSlice({
             bugs.push({
                 id: ++lastId,
                 description: action.payload.description,
-                resovled: false
+                resolved: false
             })
         },
 
         bugResolved: (bugs, action) => {
             const index = bugs.findIndex(bug => bug.id === action.payload.id)
             bugs[index].resolved = true
+        },
+
+        bugAssigned: (bugs, action) => {
+            const { bugId, userId } = action.payload
+            const index = bugs.findIndex(bug => bug.id === bugId)
+            console.log(index)
+            bugs[index].assigned_to = userId
+
         }
+
     }
 })
 console.log(slice)
 
 
-export const { bugAdded, bugResolved } = slice.actions 
+export const { bugAdded, bugResolved, bugAssigned } = slice.actions 
 export default slice.reducer;
+
+
+// Memoization
+// bugs => get unresolved bugs from the cache
+// if the states (bugs and projects) remain the same, that the function will not be executed again
+export const getUnresolvedBugs = createSelector(
+    state => state.entities.bugs,
+    state => state.entities.projects,
+    (bugs, projects) => bugs.filter(bug => !bug.resolved)
+)
+
+export const getBugsByUser = (userId) => createSelector(
+    state => state.entities.bugs,
+    bugs => bugs.filter(bug => bug.userId === userId)
+)
+
+
+// Selector function (But this one does not cache/ memoize)
+// export const getUnresolvedBugs = state => 
+//     state.entities.bugs.filter(bug => !bug.resolved)
+
 
 // export const bugAdded = createAction("bugAdded")
 // export const bugResolved = createAction("bugResolved")

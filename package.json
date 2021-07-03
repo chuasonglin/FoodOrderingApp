@@ -18,6 +18,7 @@
     "@reduxjs/toolkit": "^1.6.0",
     "lodash": "^4.17.21",
     "react-redux": "^7.2.4",
-    "redux-devtools-extension": "^2.13.9"
+    "redux-devtools-extension": "^2.13.9",
+    "reselect": "^4.0.0"
   }
 }
