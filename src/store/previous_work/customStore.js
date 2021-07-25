@@ -1,4 +1,4 @@
-import reducer from './previous_work/reducer'
+import reducer from './reducer'
 
 const createStore = (reducer) => {
     let state
